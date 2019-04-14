@@ -1,5 +1,7 @@
 package com.digitec.factura.service;
 
+import com.digitec.factura.enumeration.FacturapiResource;
+import com.digitec.factura.model.facturapi.CustomerList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -7,25 +9,36 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class FacturapiService {
 
     @Value("${facturapi.apiKey}")
     private String username;
 
-    String send(String url, HttpMethod httpMethod) {
-        RestTemplate restTemplate = new RestTemplate();
+    @Value("${facturapi.url}")
+    private String facturapiUrl;
 
-        HttpHeaders httpHeaders = new HttpHeaders();
+    private RestTemplate restTemplate;
+
+    private HttpHeaders httpHeaders;
+
+    @PostConstruct
+    private void createRestTemplate() {
+        restTemplate = new RestTemplate();
+        httpHeaders = new HttpHeaders();
         httpHeaders.setBasicAuth(username, "");
+    }
 
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+    CustomerList getClientList() {
+        HttpEntity<CustomerList> entity = new HttpEntity<>(httpHeaders);
 
         return restTemplate.exchange(
-                url,
-                httpMethod,
+                facturapiUrl + FacturapiResource.CUSTOMERS.getResource(),
+                HttpMethod.GET,
                 entity,
-                String.class
+                CustomerList.class
         ).getBody();
     }
 }

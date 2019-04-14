@@ -1,8 +1,8 @@
 package com.digitec.factura.service;
 
 import com.digitec.factura.model.CustomerListResponse;
+import com.digitec.factura.model.facturapi.CustomerList;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,13 +14,12 @@ public class ClientService {
     @Resource
     private FacturapiService facturapiService;
 
-
     public CustomerListResponse getClients() {
 
-        String response = facturapiService.send("https://www.facturapi.io/v1/customers", HttpMethod.GET);
+        CustomerList response = facturapiService.getClientList();
 
         return CustomerListResponse.builder()
-                .var(response)
+                .var(response.toString())
                 .build();
     }
 }
