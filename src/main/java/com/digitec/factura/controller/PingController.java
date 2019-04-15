@@ -1,5 +1,6 @@
 package com.digitec.factura.controller;
 
+import com.digitec.factura.controller.contract.GetAllResourceInterface;
 import com.digitec.factura.service.PingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 
 @RestController
 @AllArgsConstructor
-public class PingController implements RestResourceController {
+public class PingController implements GetAllResourceInterface {
 
     @Resource
     PingService pingService;
